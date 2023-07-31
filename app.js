@@ -23,7 +23,7 @@ async function main() {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/mydb");
     app.listen(7000);
-    console.log("сервер ожидает подключения...");
+    console.log("сервер запущен");
   } catch (err) {
     console.log(err);
   }

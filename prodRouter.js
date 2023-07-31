@@ -5,6 +5,10 @@ const prodRouter = new Router();
 // all products
 prodRouter.get("", ProdController.getAll);
 
+// favorite products
+
+prodRouter.post("/favorites", ProdController.getFavorites);
+
 // product by ID
 prodRouter.get("/:id", ProdController.getById);
 

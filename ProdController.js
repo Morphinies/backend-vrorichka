@@ -23,6 +23,17 @@ class ProdController {
     }
   }
   //
+  async getFavorites(req, res) {
+    try {
+      if (!req.body) return res.status(400);
+      const favoritesProdList = await ProdService.getFavorites(req.body);
+      if (favoritesProdList) res.send(favoritesProdList);
+      else res.status(404);
+    } catch (e) {
+      res.status(500).json(e);
+    }
+  }
+  //
   async getById(req, res) {
     try {
       const product = await ProdService.getById(req.params);

@@ -47,8 +47,6 @@ class ProdService {
           sorting = { price: 1 };
           break;
       }
-      // sortBy === "с новых"
-      console.log(sortBy);
     }
     // страница товаров !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     delete params.page;
@@ -94,6 +92,13 @@ class ProdService {
       new: true,
     });
     return product;
+  }
+  //
+  async getFavorites(favoritesList) {
+    const favoritesProdList = await Product.find({
+      _id: { $in: favoritesList },
+    });
+    return favoritesProdList;
   }
 }
 
