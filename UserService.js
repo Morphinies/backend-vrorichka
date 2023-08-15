@@ -22,6 +22,7 @@ class UserService {
                 avatar: user.avatar,
                 products: user.products,
                 favorites: user.favorites,
+                password: user.password,
             };
         }
     }
