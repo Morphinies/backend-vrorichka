@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.17.0",
+    "express-fileupload": "^1.4.0",
     "mongodb": "~4.12.0",
     "mongoose": "^7.0.4"
   },

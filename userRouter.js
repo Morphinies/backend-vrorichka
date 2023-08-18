@@ -20,4 +20,7 @@ userRouter.post("/logup", UserController.logup);
 // signup
 userRouter.post("/signup", UserController.signup);
 
+// uploadAvatar
+userRouter.post("/uploadAvatar", UserController.uploadAvatar);
+
 export default userRouter;

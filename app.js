@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./userRouter.js";
 import prodRouter from "./prodRouter.js";
+import fileUpload from "express-fileupload";
 const app = express();
 
 app.use((req, res, next) => {
@@ -15,9 +16,14 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(
+    fileUpload({
+        createParentPath: true,
+    })
+);
 app.use("/api/users", userRouter);
 app.use("/api/products", prodRouter);
-// app.use(express.static("./frontend/public"));
+app.use(express.static("./frontend/public"));
 
 async function main() {
     try {
