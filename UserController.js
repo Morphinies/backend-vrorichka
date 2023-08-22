@@ -1,9 +1,6 @@
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import userService from "./userService.js";
+import path from "path";
 import * as fs from "node:fs";
+import userService from "./UserService.js";
 
 class UserController {
     //
@@ -84,27 +81,43 @@ class UserController {
             }
             const file = req.files.file;
             const userId = req.body.userId;
+            const newFileName = Date.now() + `_${file.name}`;
             if (!file) return res.json({ error: "Incorrect input name" });
-            const newFileName = encodeURI(userId + "-" + file.name);
-            const pathToUserStorage = `C:/Users/79108/Desktop/вторичка/frontend/public/avatars/${userId}`;
+            const pathToUserStorage = path.normalize(
+                `../frontend/public/avatars/${userId}`
+            );
+            if (global.timerId) {
+                clearTimeout(global.timerId);
+            }
+            global.timerId = setTimeout(async () => {
+                const user = await userService.getById(userId);
+                fs.access(pathToUserStorage, fs.constants.F_OK, (err) => {
+                    if (!err) {
+                        fs.readdir(pathToUserStorage, (err, files) => {
+                            if (files.length) {
+                                for (let file of files) {
+                                    if (file !== user.avatar.fileName) {
+                                        fs.unlink(
+                                            pathToUserStorage + `/${file}`,
+                                            () => {}
+                                        );
+                                    }
+                                }
+                                delete global.timerId;
+                                console.log("временное хранилище очищено!");
+                            }
+                        });
+                    }
+                });
+            }, 120000);
 
-            fs.access(pathToUserStorage, fs.F_OK, (err) => {
-                if (!err) {
-                    fs.rm(pathToUserStorage);
-                    console.log("файл будет заменён");
-                } else {
-                    console.log("file no find");
-                }
-            });
             file.mv(pathToUserStorage + `/${newFileName}`, (err) => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send(err);
                 }
-                console.log("file was uploaded");
-
                 res.send({
-                    fileName: file.name,
+                    fileName: newFileName,
                     filePath: `/avatars/${userId}/${newFileName}`,
                 });
             });
